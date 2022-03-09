@@ -3,9 +3,9 @@ import Head from "next/head";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 
-type LayoutProps = {
+interface LayoutProps {
   children: ReactNode;
-};
+}
 
 export function Layout({ children }: LayoutProps) {
   return (
