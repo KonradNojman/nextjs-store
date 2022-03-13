@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { InferGetServerSidePropsType } from "next";
 import { ProductListItem } from "../components/ProductListItem";
 
 export interface StoreApiResponse {
@@ -16,26 +16,12 @@ interface Rating {
   count: number;
 }
 
-const getProducts = async () => {
-  const res = await fetch("https://fakestoreapi.com/products/");
-  const data: StoreApiResponse[] = await res.json();
-  return data;
-};
-
-const ProductsCSRPage = () => {
-  const { data, isLoading, isError } = useQuery("products", getProducts);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!data || isError) {
-    return <div>Error. Try again</div>;
-  }
-
+const ProductsPage = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) => {
   return (
     <div className="grid grid-cols-3">
-      {data.map((product) => (
+      {props.data.map((product) => (
         <ProductListItem
           key={product.id}
           data={{
@@ -49,4 +35,13 @@ const ProductsCSRPage = () => {
   );
 };
 
-export default ProductsCSRPage;
+export const getServerSideProps = async () => {
+  const res = await fetch("https://fakestoreapi.com/products/");
+  const data: StoreApiResponse[] = await res.json();
+
+  return {
+    props: { data },
+  };
+};
+
+export default ProductsPage;

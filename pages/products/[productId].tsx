@@ -1,20 +1,23 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { InferGetStaticPropsType } from "next";
+import { Layout } from "../../components/Layout";
 import { ProductDetails } from "../../components/ProductDetails";
 
-const ProductPage = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
-) => {
+const ProductPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const { data } = props;
+  if (!data) return null;
   return (
-    <div>
-      <ProductDetails
-        data={{
-          title: props.data.title,
-          description: props.data.description,
-          image: props.data.image,
-          rating: props.data.rating.rate,
-        }}
-      />
-    </div>
+    <Layout>
+      <div>
+        <ProductDetails
+          data={{
+            title: data.title,
+            description: data.description,
+            image: data.image,
+            rating: data.rating.rate,
+          }}
+        />
+      </div>
+    </Layout>
   );
 };
 
@@ -33,13 +36,16 @@ interface Rating {
   count: number;
 }
 
-export const getServerSideProps = async ({
-  query,
-}: GetServerSidePropsContext) => {
-  const productId = query.productId;
+export const getStaticProps = async ({
+  params,
+}: InferGetStaticPaths<typeof getStaticPaths>) => {
+  if (!params?.productId) {
+    return { props: {}, notFound: true };
+  }
+  const productId = params.productId;
 
   const res = await fetch(`https://fakestoreapi.com/products/${productId}`);
-  const data: StoreApiResponse = await res.json();
+  const data: StoreApiResponse | null = await res.json();
 
   return {
     props: {
@@ -48,4 +54,32 @@ export const getServerSideProps = async ({
   };
 };
 
+export const getStaticPaths = async () => {
+  const res = await fetch(`https://fakestoreapi.com/products`);
+  const data: StoreApiResponse[] | null = await res.json();
+
+  if (!data) {
+    return {
+      paths: [],
+      fallback: false,
+    };
+  }
+
+  const paths = data.map((product) => ({
+    params: {
+      productId: product.id.toString(),
+    },
+  }));
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
 export default ProductPage;
+
+export type InferGetStaticPaths<T> = T extends () => Promise<{
+  paths: Array<{ params: infer R }>;
+}>
+  ? { params?: R }
+  : never;

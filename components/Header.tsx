@@ -1,8 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import logo from "../public/shopinext.png";
 
 export function Header() {
   const router = useRouter();
+  console.log("r", router.route, router.asPath, router);
 
   const navigationLinks = [
     {
@@ -10,20 +13,23 @@ export function Header() {
       text: "Home",
     },
     {
-      slug: "/about",
-      text: "About",
+      slug: "/products",
+      text: "Products",
     },
   ];
 
   return (
-    <header className="bg-gray-700 text-white text-2xl font-bold p-6">
+    <header className="bg-gray-700 text-white text-xl md:text-2xl font-bold p-6 flex justify-between items-center">
+      <div className="w-52 flex items-center">
+        <Image src={logo} alt="" />
+      </div>
       <nav>
-        <ul className="flex gap-6">
+        <ul className="flex gap-4 md:gap-6">
           {navigationLinks.map((link, index) => (
             <li
               key={index}
               className={
-                router.route === link.slug
+                router.asPath === link.slug
                   ? "selected text-blue-400"
                   : "hover:underline"
               }

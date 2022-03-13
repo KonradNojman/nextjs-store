@@ -1,4 +1,5 @@
-import { InferGetServerSidePropsType } from "next";
+import { InferGetStaticPropsType } from "next";
+import { Layout } from "../components/Layout";
 import { ProductListItem } from "../components/ProductListItem";
 
 export interface StoreApiResponse {
@@ -17,25 +18,27 @@ interface Rating {
 }
 
 const ProductsPage = (
-  props: InferGetServerSidePropsType<typeof getServerSideProps>
+  props: InferGetStaticPropsType<typeof getStaticProps>
 ) => {
   return (
-    <div className="grid grid-cols-3">
-      {props.data.map((product) => (
-        <ProductListItem
-          key={product.id}
-          data={{
-            id: product.id,
-            image: product.image,
-            title: product.title,
-          }}
-        />
-      ))}
-    </div>
+    <Layout>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {props.data.map((product) => (
+          <ProductListItem
+            key={product.id}
+            data={{
+              id: product.id,
+              image: product.image,
+              title: product.title,
+            }}
+          />
+        ))}
+      </div>
+    </Layout>
   );
 };
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const res = await fetch("https://fakestoreapi.com/products/");
   const data: StoreApiResponse[] = await res.json();
 
