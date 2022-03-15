@@ -20,7 +20,7 @@ export const ProductListItem = ({ data }: ProductProps) => {
         </div>
       </div>
       <h2 className="text-xl font-bold pb-4 px-5 hover:text-blue-400">
-        <Link href={`/products/${data.id}`}>
+        <Link href={`/products/details/${data.id}`}>
           <a>{data.title}</a>
         </Link>
       </h2>

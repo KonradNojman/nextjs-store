@@ -5,7 +5,6 @@ import logo from "../public/shopinext.png";
 
 export function Header() {
   const router = useRouter();
-  console.log("r", router.route, router.asPath, router);
 
   const navigationLinks = [
     {

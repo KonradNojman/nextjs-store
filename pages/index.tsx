@@ -9,7 +9,6 @@ const Home: NextPage = () => {
         onClick={async () => {
           const res = await fetch(`/api/hello`);
           const json = await res.json();
-          console.log("json", json);
         }}
       >
         Test API

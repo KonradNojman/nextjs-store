@@ -1,6 +1,6 @@
 import { InferGetStaticPropsType } from "next";
-import { Layout } from "../../components/Layout";
-import { ProductDetails } from "../../components/ProductDetails";
+import { Layout } from "../../../components/Layout";
+import { ProductDetails } from "../../../components/ProductDetails";
 
 const ProductPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { data } = props;
@@ -14,6 +14,7 @@ const ProductPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
             description: data.description,
             image: data.image,
             rating: data.rating.rate,
+            longDescription: data.longDescription,
           }}
         />
       </div>
@@ -29,6 +30,7 @@ interface StoreApiResponse {
   category: string;
   image: string;
   rating: Rating;
+  longDescription: string;
 }
 
 interface Rating {
@@ -44,7 +46,9 @@ export const getStaticProps = async ({
   }
   const productId = params.productId;
 
-  const res = await fetch(`https://fakestoreapi.com/products/${productId}`);
+  const res = await fetch(
+    `https://naszsklep-api.vercel.app/api/products/${productId}`
+  );
   const data: StoreApiResponse | null = await res.json();
 
   return {
@@ -55,13 +59,13 @@ export const getStaticProps = async ({
 };
 
 export const getStaticPaths = async () => {
-  const res = await fetch(`https://fakestoreapi.com/products`);
+  const res = await fetch(`https://naszsklep-api.vercel.app/api/products`);
   const data: StoreApiResponse[] | null = await res.json();
 
   if (!data) {
     return {
       paths: [],
-      fallback: false,
+      fallback: true,
     };
   }
 
@@ -72,7 +76,7 @@ export const getStaticPaths = async () => {
   }));
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 };
 

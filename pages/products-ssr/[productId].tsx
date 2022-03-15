@@ -39,7 +39,9 @@ export const getServerSideProps = async ({
 }: GetServerSidePropsContext) => {
   const productId = query.productId;
 
-  const res = await fetch(`https://fakestoreapi.com/products/${productId}`);
+  const res = await fetch(
+    `https://naszsklep-api.vercel.app/api/products/${productId}`
+  );
   const data: StoreApiResponse | null = await res.json();
 
   return {

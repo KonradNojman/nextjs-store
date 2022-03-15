@@ -1,7 +1,10 @@
+import Link from "next/link";
+
 type PaginationProps = {
   currentPage: number;
   itemsAmount: number;
   itemsPerPage: number;
+  redirectUrl: string;
 };
 
 // >1<,2...10
@@ -26,6 +29,7 @@ export const Pagination = ({
   currentPage,
   itemsAmount,
   itemsPerPage,
+  redirectUrl,
 }: PaginationProps) => {
   const amountOfPages = Math.ceil(itemsAmount / itemsPerPage);
 
@@ -59,50 +63,50 @@ export const Pagination = ({
     <nav className="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0">
       <div className="hidden md:-mt-px md:flex items-baseline">
         {prevPagesArray.map((pageNumber) => (
-          <a
-            key={pageNumber}
-            href="#"
-            className={
-              currentPage === pageNumber
-                ? activePaginationCssClasses
-                : defaultPaginationCssClasses
-            }
-          >
-            {pageNumber}
-          </a>
+          <Link key={pageNumber} href={`${redirectUrl}/${pageNumber}`}>
+            <a
+              className={
+                currentPage === pageNumber
+                  ? activePaginationCssClasses
+                  : defaultPaginationCssClasses
+              }
+            >
+              {pageNumber}
+            </a>
+          </Link>
         ))}
 
         <div className="text-2xl">...</div>
         {shouldShowMiddlePages && (
           <>
             {currPagesArray.map((pageNumber) => (
-              <a
-                key={pageNumber}
-                href="#"
-                className={
-                  currentPage === pageNumber
-                    ? activePaginationCssClasses
-                    : defaultPaginationCssClasses
-                }
-              >
-                {pageNumber}
-              </a>
+              <Link key={pageNumber} href={`${redirectUrl}/${pageNumber}`}>
+                <a
+                  className={
+                    currentPage === pageNumber
+                      ? activePaginationCssClasses
+                      : defaultPaginationCssClasses
+                  }
+                >
+                  {pageNumber}
+                </a>
+              </Link>
             ))}
             {shouldShowAdditionalDots && <div className="text-2xl">...</div>}
           </>
         )}
         {nextPagesArray.map((pageNumber) => (
-          <a
-            key={pageNumber}
-            href="#"
-            className={
-              currentPage === pageNumber
-                ? activePaginationCssClasses
-                : defaultPaginationCssClasses
-            }
-          >
-            {pageNumber}
-          </a>
+          <Link key={pageNumber} href={`${redirectUrl}/${pageNumber}`}>
+            <a
+              className={
+                currentPage === pageNumber
+                  ? activePaginationCssClasses
+                  : defaultPaginationCssClasses
+              }
+            >
+              {pageNumber}
+            </a>
+          </Link>
         ))}
       </div>
     </nav>

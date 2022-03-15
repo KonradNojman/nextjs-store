@@ -6,6 +6,7 @@ export interface ProductType {
   description: string;
   image: string;
   rating: number;
+  longDescription: string;
 }
 
 interface ProductProps {

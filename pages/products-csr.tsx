@@ -1,14 +1,18 @@
 import { useQuery } from "react-query";
 import { ProductListItem } from "../components/ProductListItem";
 
+const PRODUCT_PAGES = 10;
+const PRODUCTS_PER_PAGE = 25;
+
 export interface StoreApiResponse {
   id: number;
   title: string;
   price: number;
   description: string;
   category: string;
-  image: string;
   rating: Rating;
+  image: string;
+  longDescription: string;
 }
 
 interface Rating {
@@ -17,7 +21,7 @@ interface Rating {
 }
 
 const getProducts = async () => {
-  const res = await fetch("https://fakestoreapi.com/products/");
+  const res = await fetch("https://naszsklep-api.vercel.app/api/products");
   const data: StoreApiResponse[] = await res.json();
   return data;
 };
