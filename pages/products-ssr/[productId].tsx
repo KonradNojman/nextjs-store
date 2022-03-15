@@ -13,6 +13,7 @@ const ProductPage = ({
           description: data.description,
           image: data.image,
           rating: data.rating.rate,
+          longDescription: data.longDescription,
         }}
       />
     </div>
@@ -27,6 +28,7 @@ interface StoreApiResponse {
   category: string;
   image: string;
   rating: Rating;
+  longDescription: string;
 }
 
 interface Rating {

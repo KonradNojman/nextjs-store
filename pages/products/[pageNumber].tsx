@@ -1,8 +1,4 @@
-import next, {
-  GetStaticPathsContext,
-  GetStaticPropsContext,
-  InferGetStaticPropsType,
-} from "next";
+import { GetStaticPropsContext, InferGetStaticPropsType } from "next";
 import { Layout } from "../../components/Layout";
 import { Pagination } from "../../components/Pagination";
 import { ProductListItem } from "../../components/ProductListItem";
@@ -24,8 +20,6 @@ interface Rating {
   rate: number;
   count: number;
 }
-
-// w next.config da sie zrobic redirect z index na /products/1 np. i nie duplikowac strony
 
 const ProductsPage = (
   props: InferGetStaticPropsType<typeof getStaticProps>
