@@ -4,6 +4,7 @@ const nextConfig = {
   trailingSlash: false,
   images: {
     domains: ["fakestoreapi.com", "naszsklep-api.vercel.app"],
+    formats: ["image/avif", "image/webp"],
   },
   async redirects() {
     return [
