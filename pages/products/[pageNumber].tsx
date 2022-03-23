@@ -1,6 +1,5 @@
 import { InferGetStaticPropsType } from "next";
 import { useRouter } from "next/router";
-import { Layout } from "../../components/Layout";
 import { Pagination } from "../../components/Pagination";
 import { ProductListItem } from "../../components/ProductListItem";
 
@@ -35,7 +34,7 @@ const ProductsPage = (
   }
 
   return (
-    <Layout>
+    <div>
       <div className="my-6 flex">
         <Pagination
           currentPage={Number(props.pageNumber)}
@@ -56,7 +55,7 @@ const ProductsPage = (
           />
         ))}
       </div>
-    </Layout>
+    </div>
   );
 };
 

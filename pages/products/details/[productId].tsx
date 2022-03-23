@@ -1,24 +1,21 @@
 import { InferGetStaticPropsType } from "next";
-import { Layout } from "../../../components/Layout";
 import { ProductDetails } from "../../../components/ProductDetails";
 
 const ProductPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { data } = props;
   if (!data) return null;
   return (
-    <Layout>
-      <div>
-        <ProductDetails
-          data={{
-            title: data.title,
-            description: data.description,
-            image: data.image,
-            rating: data.rating.rate,
-            longDescription: data.longDescription,
-          }}
-        />
-      </div>
-    </Layout>
+    <div>
+      <ProductDetails
+        data={{
+          title: data.title,
+          description: data.description,
+          image: data.image,
+          rating: data.rating.rate,
+          longDescription: data.longDescription,
+        }}
+      />
+    </div>
   );
 };
 
