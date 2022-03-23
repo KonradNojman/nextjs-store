@@ -9,6 +9,7 @@ const ProductPage = ({
     <div>
       <ProductDetails
         data={{
+          id: data.id,
           title: data.title,
           description: data.description,
           image: data.image,
