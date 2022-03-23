@@ -8,6 +8,7 @@ const ProductPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     <div>
       <ProductDetails
         data={{
+          id: data.id,
           title: data.title,
           description: data.description,
           image: data.image,
