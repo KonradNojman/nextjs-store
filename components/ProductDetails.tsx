@@ -1,8 +1,8 @@
-import Head from "next/head";
 import Image from "next/image";
-import Link from "next/link";
-import ReactMarkdown from "react-markdown";
+import { Link } from "../components/Link";
 import { NextSeo } from "next-seo";
+import { Markdown } from "./Markdown";
+import { MarkdownResult } from "../utils";
 
 export interface ProductType {
   id: number;
@@ -10,7 +10,7 @@ export interface ProductType {
   description: string;
   image: string;
   rating: number;
-  longDescription: string;
+  longDescription: MarkdownResult;
 }
 
 interface ProductProps {
@@ -38,9 +38,7 @@ export const ProductDetails = ({ data }: ProductProps) => {
           site_name: "Shopinext",
         }}
       />
-      <Link href="/products">
-        <a>⬅ Powrót na stronę główną</a>
-      </Link>
+      <Link href="/products">⬅ Powrót na stronę główną</Link>
       <div className="flex flex-col md:flex-row">
         <div className="w-full h-80 relative my-8 md:w-1/2">
           <Image src={data.image} alt="" layout="fill" objectFit="contain" />
@@ -52,7 +50,7 @@ export const ProductDetails = ({ data }: ProductProps) => {
           <h2 className="text-2xl font-bold my-3">{data.title}</h2>
           <p>{data.description}</p>
           <article className="prose lg:prose-xl">
-            <ReactMarkdown>{data.longDescription}</ReactMarkdown>
+            <Markdown>{data.longDescription}</Markdown>
           </article>
         </section>
       </div>
