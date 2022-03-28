@@ -1,5 +1,4 @@
 import NextLink from "next/link";
-import { ReactNode } from "react";
 
 const BASE_DOMAIN = process.env.NEXT_PUBLIC_BASE_DOMAIN;
 
@@ -7,10 +6,7 @@ export const Link = ({
   href,
   children,
   ...props
-}: {
-  href: string | undefined;
-  children?: ReactNode;
-}) => {
+}: JSX.IntrinsicElements["a"]) => {
   if (!href) {
     return <a {...props}>{children}</a>;
   }
