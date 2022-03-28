@@ -1,4 +1,5 @@
 import { InferGetStaticPropsType } from "next";
+import { serialize } from "next-mdx-remote/serialize";
 import { ProductDetails } from "../../../components/ProductDetails";
 
 const ProductPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
@@ -8,6 +9,7 @@ const ProductPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     <div>
       <ProductDetails
         data={{
+          id: data.id,
           title: data.title,
           description: data.description,
           image: data.image,
@@ -48,9 +50,16 @@ export const getStaticProps = async ({
   );
   const data: StoreApiResponse | null = await res.json();
 
+  if (!data) {
+    return {
+      props: {},
+      notFound: true,
+    };
+  }
+
   return {
     props: {
-      data,
+      data: { ...data, longDescription: await serialize(data.longDescription) },
     },
   };
 };

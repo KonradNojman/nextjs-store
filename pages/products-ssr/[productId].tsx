@@ -1,5 +1,6 @@
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { ProductDetails } from "../../components/ProductDetails";
+import { MarkdownResult } from "../../utils";
 
 const ProductPage = ({
   data,
@@ -9,6 +10,7 @@ const ProductPage = ({
     <div>
       <ProductDetails
         data={{
+          id: data.id,
           title: data.title,
           description: data.description,
           image: data.image,
@@ -28,7 +30,7 @@ interface StoreApiResponse {
   category: string;
   image: string;
   rating: Rating;
-  longDescription: string;
+  longDescription: MarkdownResult;
 }
 
 interface Rating {
