@@ -28,7 +28,8 @@ export function Header() {
             <li
               key={index}
               className={
-                router.asPath === link.slug
+                // @todo flaky code
+                `/${router.asPath.split("/")[1]}` === link.slug
                   ? "selected text-blue-400"
                   : "hover:underline"
               }

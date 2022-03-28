@@ -11,8 +11,8 @@ export function Layout({ children }: LayoutProps) {
   return (
     <div className="flex flex-col min-h-screen">
       <Head>
-        <title>Next.js Shop</title>
-        <meta name="description" content="Next.js online shop" />
+        <title>Shopinext</title>
+        <meta name="description" content="Shopinext online shop" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />

@@ -1,24 +1,23 @@
 import { InferGetStaticPropsType } from "next";
-import { Layout } from "../../../components/Layout";
+import { serialize } from "next-mdx-remote/serialize";
 import { ProductDetails } from "../../../components/ProductDetails";
 
 const ProductPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { data } = props;
   if (!data) return null;
   return (
-    <Layout>
-      <div>
-        <ProductDetails
-          data={{
-            title: data.title,
-            description: data.description,
-            image: data.image,
-            rating: data.rating.rate,
-            longDescription: data.longDescription,
-          }}
-        />
-      </div>
-    </Layout>
+    <div>
+      <ProductDetails
+        data={{
+          id: data.id,
+          title: data.title,
+          description: data.description,
+          image: data.image,
+          rating: data.rating.rate,
+          longDescription: data.longDescription,
+        }}
+      />
+    </div>
   );
 };
 
@@ -51,9 +50,16 @@ export const getStaticProps = async ({
   );
   const data: StoreApiResponse | null = await res.json();
 
+  if (!data) {
+    return {
+      props: {},
+      notFound: true,
+    };
+  }
+
   return {
     props: {
-      data,
+      data: { ...data, longDescription: await serialize(data.longDescription) },
     },
   };
 };
