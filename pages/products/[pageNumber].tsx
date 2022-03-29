@@ -51,6 +51,7 @@ const ProductsPage = (
               id: product.id,
               image: product.image,
               title: product.title,
+              price: product.price,
             }}
           />
         ))}
