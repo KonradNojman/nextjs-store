@@ -1,6 +1,15 @@
+import { gql } from "@apollo/client";
 import { InferGetStaticPropsType } from "next";
 import { serialize } from "next-mdx-remote/serialize";
 import { ProductDetails } from "../../../components/ProductDetails";
+import {
+  GetProductDetailsBySlugDocument,
+  GetProductDetailsBySlugQuery,
+  GetProductDetailsBySlugQueryVariables,
+  GetProductSlugsDocument,
+  GetProductSlugsQuery,
+} from "../../../generated/graphql";
+import { apolloClient } from "../../../graphql/apolloClient";
 
 const ProductPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { data } = props;
@@ -9,33 +18,17 @@ const ProductPage = (props: InferGetStaticPropsType<typeof getStaticProps>) => {
     <div>
       <ProductDetails
         data={{
-          id: data.id,
-          title: data.title,
+          id: data.slug,
+          title: data.name,
           description: data.description,
-          image: data.image,
-          rating: data.rating.rate,
+          image: data.images[0].url,
+          rating: 3,
           longDescription: data.longDescription,
         }}
       />
     </div>
   );
 };
-
-interface StoreApiResponse {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: Rating;
-  longDescription: string;
-}
-
-interface Rating {
-  rate: number;
-  count: number;
-}
 
 export const getStaticProps = async ({
   params,
@@ -45,12 +38,17 @@ export const getStaticProps = async ({
   }
   const productId = params.productId;
 
-  const res = await fetch(
-    `https://naszsklep-api.vercel.app/api/products/${productId}`
-  );
-  const data: StoreApiResponse | null = await res.json();
+  const { data } = await apolloClient.query<
+    GetProductDetailsBySlugQuery,
+    GetProductDetailsBySlugQueryVariables
+  >({
+    variables: {
+      slug: productId,
+    },
+    query: GetProductDetailsBySlugDocument,
+  });
 
-  if (!data) {
+  if (!data?.product) {
     return {
       props: {},
       notFound: true,
@@ -59,14 +57,18 @@ export const getStaticProps = async ({
 
   return {
     props: {
-      data: { ...data, longDescription: await serialize(data.longDescription) },
+      data: {
+        ...data.product,
+        longDescription: await serialize(data.product.description),
+      },
     },
   };
 };
 
 export const getStaticPaths = async () => {
-  const res = await fetch(`https://naszsklep-api.vercel.app/api/products`);
-  const data: StoreApiResponse[] | null = await res.json();
+  const { data } = await apolloClient.query<GetProductSlugsQuery>({
+    query: GetProductSlugsDocument,
+  });
 
   if (!data) {
     return {
@@ -75,9 +77,9 @@ export const getStaticPaths = async () => {
     };
   }
 
-  const paths = data.map((product) => ({
+  const paths = data.products.map((product) => ({
     params: {
-      productId: product.id.toString(),
+      productId: product.slug,
     },
   }));
   return {

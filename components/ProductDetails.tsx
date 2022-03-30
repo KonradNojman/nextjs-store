@@ -5,7 +5,7 @@ import { Markdown } from "./Markdown";
 import { MarkdownResult } from "../utils";
 
 export interface ProductType {
-  id: number;
+  id: string;
   title: string;
   description: string;
   image: string;

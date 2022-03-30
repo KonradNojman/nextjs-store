@@ -3,7 +3,11 @@ const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
   images: {
-    domains: ["fakestoreapi.com", "naszsklep-api.vercel.app"],
+    domains: [
+      "fakestoreapi.com",
+      "naszsklep-api.vercel.app",
+      "media.graphcms.com",
+    ],
     formats: ["image/avif", "image/webp"],
   },
   async redirects() {

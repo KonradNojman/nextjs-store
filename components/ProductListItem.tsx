@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useCartState } from "./Cart/CartContext";
 
 export interface ProductType {
-  id: number;
+  id: string;
   title: string;
   image: string;
   price: number;

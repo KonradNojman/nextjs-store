@@ -1,26 +1,18 @@
+import { gql } from "@apollo/client";
 import { InferGetStaticPropsType } from "next";
 import { useRouter } from "next/router";
 import { Pagination } from "../../components/Pagination";
 import { ProductListItem } from "../../components/ProductListItem";
+import {
+  GetProductListDocument,
+  GetProductListQuery,
+  GetProductListQueryVariables,
+} from "../../generated/graphql";
+import { apolloClient } from "../../graphql/apolloClient";
 
 const PRODUCT_PAGES = 150;
 const MAX_PRODUCT_PAGES_TO_PRERENDER = 20;
-const PRODUCTS_PER_PAGE = 25;
-export interface StoreApiResponse {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  rating: Rating;
-  image: string;
-  longDescription: string;
-}
-
-interface Rating {
-  rate: number;
-  count: number;
-}
+const PRODUCTS_PER_PAGE = 4;
 
 const ProductsPage = (
   props: InferGetStaticPropsType<typeof getStaticProps>
@@ -44,13 +36,13 @@ const ProductsPage = (
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {props.data.map((product) => (
+        {props.data.products.map((product) => (
           <ProductListItem
-            key={product.id}
+            key={product.slug}
             data={{
-              id: product.id,
-              image: product.image,
-              title: product.title,
+              id: product.slug,
+              image: product.images[0].url,
+              title: product.name,
               price: product.price,
             }}
           />
@@ -64,12 +56,18 @@ export const getStaticProps = async ({
   params,
 }: InferGetStaticPaths<typeof getStaticPaths>) => {
   const { pageNumber = "1" } = params || {};
-  const offset = (Number(pageNumber) - 1) * PRODUCTS_PER_PAGE;
+  // const offset = (Number(pageNumber) - 1) * PRODUCTS_PER_PAGE;
 
-  const res = await fetch(
-    `https://naszsklep-api.vercel.app/api/products?take=${PRODUCTS_PER_PAGE}&offset=${offset}`
-  );
-  const data: StoreApiResponse[] = await res.json();
+  const { data } = await apolloClient.query<
+    GetProductListQuery,
+    GetProductListQueryVariables
+  >({
+    variables: {
+      first: PRODUCTS_PER_PAGE,
+      skip: (Number(pageNumber) - 1) * PRODUCTS_PER_PAGE,
+    },
+    query: GetProductListDocument,
+  });
 
   return {
     props: { data, pageNumber },
