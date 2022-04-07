@@ -7,6 +7,7 @@ const nextConfig = {
       "fakestoreapi.com",
       "naszsklep-api.vercel.app",
       "media.graphcms.com",
+      "media.graphassets.com",
     ],
     formats: ["image/avif", "image/webp"],
   },
